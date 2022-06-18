@@ -1,81 +1,40 @@
-import dotenv from "dotenv"
-import express from "express"
-dotenv.config()
+import 'dotenv/config'
+import express from "express";
+import cors from "cors";
+import compress from "compression";
+import cookieParser from "cookie-parser";
+import helmet from "helmet";
+import models,{sequelize} from "./models/init-models";
+import routes from './Routes/indexRoute'
 
-const Pool = require('pg').Pool;
-const pool = new Pool({
-    host : "localhost",
-    user : "postgres",
-    password  : "admin",
-    database : "postgres",
-    port : 5432
-})
-
+const port = process.env.PORT || 3000;
 const app = express()
+
 app.use(express.json())
-
-const port = process.env.PORT || 3003
-
-app.listen(port,()=>{console.log('Server listening on port '+port)})
-
-app.get('/api/region',(req,res)=>{
-    pool.query('select * from regions',
-    [],
-    (error,result)=>{
-        if(error){
-            throw error;
-        }
-        res.status(200).json(result.rows)
-    })
+app.use(express.urlencoded({extended:true}))
+app.use(cookieParser())
+app.use(helmet())
+app.use(compress())
+app.use(cors())
+app.use(async(req,res,next)=> {
+    req.context = {models}
+    next()
 })
 
-app.get('/api/region/:id',(req,res)=>{
-    const {id} = req.params
-    pool.query('select * from regions where region_id = $1',
-    [id],
-    (error,result)=>{
-        if(error){
-        throw error;
-        }
-        res.status(200).json(result.rows)
-    })
+app.use('/region',routes.RegRoute)
+app.use('/countrie',routes.RegCountrie)
+app.use('/department',routes.RegDepartment)
+app.use('/location',routes.RegLocation)
+app.use('/employee',routes.RegEmployee)
+app.use('/job',routes.RegJob)
+app.use('/dependent',routes.RegDependent)
+const dropDatabaseSync = false
+
+sequelize.sync({force : dropDatabaseSync}).then(async()=>{
+    if (dropDatabaseSync) {
+        console.log("Database do not drop");
+    }
+    app.listen(port,()=>{console.log('Server is listening on port '+port)})
 })
 
-app.post('/api/region/',(req,res)=>{
-    const {region_name} = req.body
-    pool.query('insert into regions (region_name) values ($1)',
-    [region_name],
-    (error,result)=>{
-        if (error) {
-            throw error;
-        }
-        res.status(200).json(result.rowCount)
-    })
-})
-
-app.put('/api/region/:id',(req,res)=>{
-    const {id} = req.params
-    const {name} = req.body
-    pool.query("update regions set region_name=$1 where region_id=$2",
-    [name,id],
-    (error,result) =>{
-        if (error) {
-            throw error;
-        }
-        res.status(200).json(result.rowCount)
-    })
-})
-
-app.delete('/api/region/:id',(req,res)=>{
-    const {id} = req.params
-    pool.query('delete from regions where region_id = $1',
-    [id],
-    (error,result)=>{
-        if (error) {
-            throw error;
-        }
-        res.status(200).json(result.rowCount)
-    })
-})
-
-
+export default app
