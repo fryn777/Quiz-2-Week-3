@@ -22,12 +22,12 @@ app.use(async(req,res,next)=> {
 })
 
 app.use('/region',routes.RegRoute)
-app.use('/countrie',routes.RegCountrie)
-app.use('/department',routes.RegDepartment)
-app.use('/location',routes.RegLocation)
-app.use('/employee',routes.RegEmployee)
-app.use('/job',routes.RegJob)
-app.use('/dependent',routes.RegDependent)
+app.use('/countrie',routes.CountRoute)
+app.use('/department',routes.DepartRoute)
+app.use('/location',routes.LocaRoute)
+app.use('/employee',routes.EmploRoute)
+app.use('/job',routes.JobRoute)
+app.use('/dependent',routes.DepenRoute)
 const dropDatabaseSync = false
 
 sequelize.sync({force : dropDatabaseSync}).then(async()=>{

@@ -2,7 +2,11 @@ import { sequelize } from "../models/init-models"
 
 const findAll = async (req,res)=>{
     try {
-        const dependent = await req.context.models.dependents.findAll()
+        const dependent = await req.context.models.dependents.findAll({
+            include : [{
+              all : true
+            }]
+        })
         return res.send(dependent)
     } catch (error) {
         return res.status(404).send(error)
@@ -20,13 +24,13 @@ const findOne = async (req,res)=>{
 }
 
 const create = async (req,res)=>{
+    const cekEmplo = req.employees
     try {
         const dependent = await req.context.models.dependents.create({
-            dependent_id : req.body.dependent_id,
             first_name : req.body.first_name,
             last_name : req.body.last_name,
             relationship : req.body.relationship,
-            employee_id : req.body.employee_id
+            employee_id : cekEmplo.employee_id
             
         })
         return res.send(dependent)

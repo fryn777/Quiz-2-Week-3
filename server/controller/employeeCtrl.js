@@ -2,7 +2,11 @@ import { sequelize } from "../models/init-models"
 
 const findAll = async (req,res)=>{
     try {
-        const employee = await req.context.models.employees.findAll()
+        const employee = await req.context.models.employees.findAll({
+            include : [{
+               all : true
+            }]
+        })
         return res.send(employee)
     } catch (error) {
         return res.status(404).send(error)
@@ -20,6 +24,29 @@ const findOne = async (req,res)=>{
 }
 
 const create = async (req,res)=>{
+    const cekDepart = req.departments
+    const cekJob = req.jobs
+    try {
+        const employee = await req.context.models.employees.create({
+            first_name : req.body.first_name,
+            last_name : req.body.last_name,
+            email : req.body.email,
+            phone_number : req.body.phone_number,
+            hire_date : req.body.hire_date,
+            job_id : cekJob.job_id,
+            salary : req.body.salary,
+            manager_id : req.body.manager_id,
+            department_id : cekDepart.department_id,
+         
+    
+        })
+        return res.send(employee)
+    } catch (error) {
+        return res.status(404).send(error)
+    }
+}
+
+const createNext = async (req,res,next)=>{
     try {
         const employee = await req.context.models.employees.create({
             first_name : req.body.first_name,
@@ -30,9 +57,11 @@ const create = async (req,res)=>{
             job_id : req.body.job_id,
             salary : req.body.salary,
             manager_id : req.body.manager_id,
-            department_id : req.body.department_id
+            department_id : req.body.department_id,
+    
         })
-        return res.send(employee)
+        req.employees = employee
+        next()
     } catch (error) {
         return res.status(404).send(error)
     }
@@ -87,6 +116,7 @@ export default {
     findAll,
     findOne,
     create,
+    createNext,
     update,
     deleted,
     querySQL
