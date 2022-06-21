@@ -37,6 +37,8 @@ const create = async (req,res)=>{
             salary : req.body.salary,
             manager_id : req.body.manager_id,
             department_id : cekDepart.department_id,
+
+            //Saya Bingung gimana cara menempatkan 2 cek secara bersamaan
          
     
         })
