@@ -37,10 +37,6 @@ const create = async (req,res)=>{
             salary : req.body.salary,
             manager_id : req.body.manager_id,
             department_id : cekDep.department_id,
-
-            //Saya Bingung gimana cara menempatkan 2 cek secara bersamaan
-         
-    
         })
         return res.send(employee)
     } catch (error) {
@@ -61,10 +57,6 @@ const createJobEmplo = async (req,res)=>{
             salary : req.body.salary,
             manager_id : req.body.manager_id,
             department_id : req.body.department_id,
-
-            //Saya Bingung gimana cara menempatkan 2 cek secara bersamaan
-         
-    
         })
         return res.send(employee)
     } catch (error) {
@@ -84,11 +76,7 @@ const createDepartEmplo = async (req,res)=>{
             job_id : req.body.job_id,
             salary : req.body.salary,
             manager_id : req.body.manager_id,
-            department_id : cekDep.department_id,
-
-            //Saya Bingung gimana cara menempatkan 2 cek secara bersamaan
-         
-    
+  
         })
         return res.send(employee)
     } catch (error) {
