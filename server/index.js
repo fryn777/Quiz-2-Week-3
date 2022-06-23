@@ -28,6 +28,8 @@ app.use('/location',routes.LocaRoute)
 app.use('/employee',routes.EmploRoute)
 app.use('/job',routes.JobRoute)
 app.use('/dependent',routes.DepenRoute)
+app.use('/user',routes.userRoute)
+
 const dropDatabaseSync = false
 
 sequelize.sync({force : dropDatabaseSync}).then(async()=>{

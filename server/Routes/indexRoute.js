@@ -4,7 +4,9 @@ import DepartRoute from './departmentRoute';
 import LocaRoute from './locationRoute';
 import EmploRoute from './employeeRoute';
 import JobRoute from './jobRoute';
-import DepenRoute from './dependentRoute'
+import DepenRoute from './dependentRoute';
+import userRoute from './userRoute';
+
 
 export default {
     RegRoute,
@@ -13,5 +15,6 @@ export default {
     LocaRoute,
     EmploRoute,
     JobRoute,
-    DepenRoute
+    DepenRoute,
+    userRoute
 }
